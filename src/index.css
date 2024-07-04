@@ -64,6 +64,7 @@ tr td:nth-child(2) {
     text-align: center;
     display: flex;
     align-items: center;
+    width: 80%;
 }
 
 .load {
@@ -76,10 +77,49 @@ tr td:nth-child(2) {
     font-weight: bold;
 }
 
+
+input {
+    width: 70%;
+    min-width: fit-content;
+}
+
+button {
+    min-width: fit-content;
+    width: 10%;
+}
+
+.appChild {
+    background: #27272a;
+    width: 100%;
+}
+
+.sub {
+    width: 80%;
+    margin: auto;
+}
+
+@media only screen and (max-width: 992px) {
+    input {
+        width: 70%;
+    }
+
+    button {
+        width: 10%;
+    }
+}
+
 @media only screen and (max-width: 768px) {
 
     .app {
         height: 100vh;
+    }
+
+    .appChild {
+        flex-wrap: wrap;
+    }
+
+    .appChild>* {
+        width: 100%;
     }
 
     td {

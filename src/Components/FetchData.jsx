@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import TableBox from "./TableBox";
 
 const FetchData = () => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
 
   async function fetchData() {
@@ -16,16 +16,13 @@ const FetchData = () => {
           setData(response.data);
         })
         .catch((error) => {
+          console.log(ApiData);
           console.log(error);
         });
     } catch (error) {
       console.error("ERR: " + error);
     }
   }
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   function searchFilter(data, search) {
     return data.filter((coin) => {
@@ -48,6 +45,17 @@ const FetchData = () => {
     );
   }
 
+  function addLoader() {
+    setTimeout(() => {
+      document.getElementById("load").innerHTML =
+        "Error loading data Refresh the page. or try again later.";
+    }, 5000);
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   useEffect(() => {
     if (search) {
       const filteredData = searchFilter(data, search);
@@ -59,34 +67,35 @@ const FetchData = () => {
 
   return (
     <div className="app">
-      <div className="flex w-4/6 justify-center items-center p-5 gap-2">
-        <input
-          value={search}
-          onChange={(e) => {
-            return setSearch(e.target.value);
-          }}
-          type="text"
-          placeholder="Search By Name or Symbol "
-          className="border w-3/4 px-3 py-2 border-white bg-transparent"
-        />
-        <button
-          onClick={sortDataByMktCap}
-          className="border py-2 w-1/5 px-3 border-white bg-transparent"
-        >
-          Sort By Mkt Cap
-        </button>
-        <button
-          onClick={sortDataByPercentage}
-          className="border py-2 w-1/5 px-3 border-white bg-transparent"
-        >
-          Sort by percentage
-        </button>
+      <div className="sub sticky top-0 flex justify-center items-center">
+        <div className="appChild app-sub flex w-4/6 justify-center items-center p-5 gap-2">
+          <input
+            value={search}
+            onChange={(e) => {
+              return setSearch(e.target.value);
+            }}
+            type="text"
+            placeholder="Search By Name or Symbol "
+            className="rounded-lg border w-3/4 px-3 py-2 border-white bg-transparent"
+          />
+          <button
+            onClick={sortDataByMktCap}
+            className="rounded-lg border py-2 w-1/5 px-3 border-white bg-transparent"
+          >
+            Sort By Mkt Cap
+          </button>
+          <button
+            onClick={sortDataByPercentage}
+            className="rounded-lg border py-2 w-1/5 px-3 border-white bg-transparent"
+          >
+            Sort by percentage
+          </button>
+        </div>
       </div>
       <div className="app-sub">
-        {data > 0 ? (
+        {data.length > 0 ? (
           <table>
             <tbody>
-              {console.log(data)}
               {data.map((coin) => {
                 return <TableBox data={coin} key={coin.id} />;
               })}
@@ -96,11 +105,7 @@ const FetchData = () => {
           <div className="load" id="load">
             <p className="loader"></p>
             <p className="loading">Loading</p>
-            {document.getElementById("load") &&
-              setTimeout(() => {
-                document.getElementById("load").innerHTML =
-                  "Error loading data Refresh the page. or try again later.";
-              }, 5000)}
+            {addLoader()}
           </div>
         )}
       </div>
